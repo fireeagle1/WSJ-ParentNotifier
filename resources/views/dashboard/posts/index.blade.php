@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="py-8">
-    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
         {{-- Header --}}
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-xl font-bold text-gray-900">Posts</h2>
@@ -42,27 +42,48 @@
         @else
             <div class="space-y-4">
                 @foreach ($posts as $post)
-                    <article class="bg-white shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-                        <div class="p-5">
-                            {{-- Post header: avatar, author, time --}}
+                    <article class="bg-white shadow-sm border {{ $post->is_pinned ? 'border-brand-200 ring-1 ring-brand-100' : 'border-gray-100' }} overflow-hidden">
+                        {{-- Pinned badge --}}
+                        @if($post->is_pinned)
+                            <div class="px-4 py-2 bg-brand-50 border-b border-brand-100 flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5 text-brand-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                                </svg>
+                                <span class="text-xs font-semibold text-brand-700">Pinned</span>
+                            </div>
+                        @endif
+
+                        {{-- Map as hero image when no photos but location exists --}}
+                        @if($post->photos->isEmpty() && $post->latitude && $post->longitude)
+                            <div class="w-full"
+                                 id="map-post-{{ $post->id }}"
+                                 style="height: 200px;"
+                                 data-lat="{{ $post->latitude }}"
+                                 data-lng="{{ $post->longitude }}">
+                            </div>
+                        @endif
+
+                        <div class="p-4 sm:p-5">
+                            {{-- Post Header: Author, Timestamp & Actions --}}
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-brand-600 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
-                                        {{ strtoupper(substr($post->leader->display_name ?? 'U', 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <div class="flex items-center gap-2">
-                                            <p class="font-semibold text-gray-900 text-sm">{{ $post->leader->display_name ?? 'Unknown' }}</p>
-                                            @if($post->is_pinned)
-                                                <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs font-medium bg-purple-100 text-purple-700">📌 Pinned</span>
-                                            @endif
+                                    @if($post->leader->photo_path)
+                                        <img src="{{ asset('storage/' . $post->leader->photo_path) }}"
+                                             alt="{{ $post->leader->display_name }}"
+                                             class="w-10 h-10 object-cover ring-2 ring-brand-100">
+                                    @else
+                                        <div class="w-10 h-10 bg-wsj-navy flex items-center justify-center text-white font-semibold text-sm ring-2 ring-blue-100">
+                                            {{ strtoupper(substr($post->leader->display_name ?? 'U', 0, 1)) }}
                                         </div>
-                                        <p class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</p>
+                                    @endif
+                                    <div>
+                                        <p class="font-semibold text-gray-900 text-sm">{{ $post->leader->display_name ?? 'Unknown' }}</p>
+                                        <p class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }} · {{ $post->created_at->format('j M Y, g:i A') }}</p>
                                     </div>
                                 </div>
 
-                                {{-- Actions dropdown --}}
-                                <div class="flex items-center gap-1" x-data="{ open: false }">
+                                {{-- Edit / Delete actions --}}
+                                <div class="flex items-center gap-1">
                                     <a href="{{ route('posts.edit', $post) }}"
                                        class="p-2 text-gray-400 hover:text-brand-600 hover:bg-brand-50 transition"
                                        title="Edit">
@@ -85,47 +106,35 @@
                                 </div>
                             </div>
 
-                            {{-- Post content --}}
-                            <div class="mt-3 text-gray-800 text-sm leading-relaxed whitespace-pre-line">{{ Str::limit($post->content, 300) }}</div>
+                            {{-- Post content (full, not truncated) --}}
+                            <div class="mt-3 text-gray-800 text-[15px] leading-relaxed whitespace-pre-wrap">{{ $post->content }}</div>
 
-                            {{-- Photo thumbnails --}}
-                            @if($post->photos->count() > 0)
-                                <div class="mt-3 flex flex-wrap gap-2">
-                                    @foreach($post->photos->take(4) as $photo)
-                                        <div class="relative w-20 h-20 overflow-hidden bg-gray-100">
+                            {{-- Photos (full-size grid with lightbox) --}}
+                            @if($post->photos->isNotEmpty())
+                                <div class="grid {{ $post->photos->count() === 1 ? 'grid-cols-1' : 'grid-cols-2' }} gap-1.5 mt-4 overflow-hidden">
+                                    @foreach($post->photos as $photo)
+                                        <button type="button"
+                                                class="aspect-square overflow-hidden cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 {{ $post->photos->count() === 1 ? 'aspect-video' : '' }}"
+                                                onclick="openLightbox('{{ asset('storage/photos/' . $photo->filename) }}')"
+                                                aria-label="View full size photo">
                                             <img src="{{ asset('storage/photos/' . $photo->filename) }}"
                                                  alt="Post photo"
                                                  class="w-full h-full object-cover"
                                                  loading="lazy">
-                                        </div>
+                                        </button>
                                     @endforeach
-                                    @if($post->photos->count() > 4)
-                                        <div class="w-20 h-20 bg-gray-100 flex items-center justify-center">
-                                            <span class="text-sm font-medium text-gray-500">+{{ $post->photos->count() - 4 }}</span>
-                                        </div>
-                                    @endif
                                 </div>
-                            @endif
 
-                            {{-- Post meta badges --}}
-                            <div class="mt-3 flex items-center gap-2 flex-wrap">
-                                @if ($post->latitude && $post->longitude)
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-blue-50 text-blue-700">
-                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
-                                        </svg>
-                                        Location
-                                    </span>
+                                {{-- Small inline map below photos if location exists --}}
+                                @if($post->latitude && $post->longitude)
+                                    <div class="overflow-hidden border border-gray-100 mt-4"
+                                         id="map-post-{{ $post->id }}"
+                                         style="height: 150px;"
+                                         data-lat="{{ $post->latitude }}"
+                                         data-lng="{{ $post->longitude }}">
+                                    </div>
                                 @endif
-                                @if ($post->photos->count() > 0)
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-brand-50 text-brand-700">
-                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
-                                        </svg>
-                                        {{ $post->photos->count() }} {{ Str::plural('photo', $post->photos->count()) }}
-                                    </span>
-                                @endif
-                            </div>
+                            @endif
                         </div>
                     </article>
                 @endforeach
@@ -133,11 +142,94 @@
 
             {{-- Pagination --}}
             @if(method_exists($posts, 'hasPages') && $posts->hasPages())
-                <div class="mt-6">
+                <nav class="mt-6" aria-label="Pagination">
                     {{ $posts->links() }}
-                </div>
+                </nav>
             @endif
         @endif
     </div>
 </div>
+
+{{-- Lightbox --}}
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img id="lightbox-img" src="" alt="Full size photo">
+</div>
+
+@push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin="" />
+<style>
+    .lightbox-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.85);
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    .lightbox-overlay.active {
+        display: flex;
+    }
+    .lightbox-overlay img {
+        max-width: 90vw;
+        max-height: 90vh;
+        object-fit: contain;
+    }
+    .lightbox-close {
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 10000;
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+<script>
+    // Lightbox
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+        document.getElementById('lightbox-img').src = '';
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeLightbox();
+    });
+
+    // Initialize maps
+    document.querySelectorAll('[id^="map-post-"]').forEach(function(el) {
+        var lat = parseFloat(el.dataset.lat);
+        var lng = parseFloat(el.dataset.lng);
+        if (!lat || !lng) return;
+
+        var map = L.map(el, {
+            scrollWheelZoom: false,
+            dragging: !L.Browser.mobile
+        }).setView([lat, lng], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+            maxZoom: 19
+        }).addTo(map);
+
+        L.marker([lat, lng]).addTo(map);
+    });
+</script>
+@endpush
 @endsection

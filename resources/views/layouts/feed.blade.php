@@ -124,7 +124,11 @@
     <footer class="border-t border-gray-200 mt-8">
         <div class="max-w-3xl mx-auto px-4 py-4 sm:px-6 text-center">
             <p class="text-sm text-gray-500">&copy; {{ date('Y') }} {{ $brandName }}</p>
-            <p class="text-xs text-gray-400 mt-1">Kindly provided by <a href="https://ckenterprises.co.uk" class="text-brand-500 hover:text-brand-700 transition" target="_blank" rel="noopener">CK Enterprises UK</a></p>
+            <p class="text-xs text-gray-400 mt-1">
+                <a href="{{ route('privacy') }}" class="hover:text-gray-600 transition">Privacy</a>
+                <span class="mx-1">·</span>
+                Kindly provided by <a href="https://ckenterprises.co.uk" class="text-brand-500 hover:text-brand-700 transition" target="_blank" rel="noopener">CK Enterprises UK</a>
+            </p>
         </div>
     </footer>
 

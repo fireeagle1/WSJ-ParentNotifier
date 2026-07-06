@@ -38,7 +38,7 @@
                         <option value="">Select leader...</option>
                         @foreach ($leaders as $leader)
                             <option value="{{ $leader->id }}" data-phone="{{ $leader->phone }}" {{ old('leader_id') == $leader->id ? 'selected' : '' }}>
-                                {{ $leader->display_name }} ({{ $leader->email }})
+                                {{ $leader->display_name }}
                             </option>
                         @endforeach
                     </select>
@@ -72,7 +72,6 @@
                            maxlength="50"
                            class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                            placeholder="Auto-filled from profile">
-                    <p class="mt-0.5 text-xs text-gray-400">Auto-fills from leader's profile</p>
                 </div>
                 <div>
                     <label for="notes" class="block text-xs font-medium text-gray-500 mb-1">Notes (optional)</label>
@@ -93,60 +92,92 @@
             </form>
         </div>
 
-        <!-- Schedule Table -->
+        <!-- Schedule - Grouped by date ranges -->
         <div class="bg-white overflow-hidden shadow-sm">
             @if ($contacts->isEmpty())
                 <div class="p-6 text-center text-gray-500">
                     No home contact entries scheduled yet.
                 </div>
             @else
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Leader</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach ($contacts as $contact)
-                                <tr class="{{ $contact->date->isToday() ? 'bg-purple-50' : '' }}">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{ $contact->date->format('D, j M Y') }}
-                                        @if($contact->date->isToday())
-                                            <span class="ml-2 inline-flex items-center px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-800">Today</span>
+                @php
+                    // Group consecutive dates by leader + phone into ranges
+                    $ranges = collect();
+                    $currentRange = null;
+
+                    foreach ($contacts as $contact) {
+                        if ($currentRange &&
+                            $currentRange['leader_id'] === $contact->leader_id &&
+                            $currentRange['phone'] === $contact->phone &&
+                            $contact->date->diffInDays($currentRange['end_date']) === 1) {
+                            $currentRange['end_date'] = $contact->date;
+                            $currentRange['count']++;
+                            $currentRange['includes_today'] = $currentRange['includes_today'] || $contact->date->isToday();
+                        } else {
+                            if ($currentRange) {
+                                $ranges->push($currentRange);
+                            }
+                            $currentRange = [
+                                'leader_id' => $contact->leader_id,
+                                'leader' => $contact->leader,
+                                'start_date' => $contact->date,
+                                'end_date' => $contact->date,
+                                'phone' => $contact->phone,
+                                'notes' => $contact->notes,
+                                'count' => 1,
+                                'includes_today' => $contact->date->isToday(),
+                            ];
+                        }
+                    }
+                    if ($currentRange) {
+                        $ranges->push($currentRange);
+                    }
+                @endphp
+
+                <div class="p-4">
+                    <p class="text-sm text-gray-500 mb-4">{{ $contacts->count() }} total {{ Str::plural('day', $contacts->count()) }} scheduled across {{ $ranges->count() }} {{ Str::plural('block', $ranges->count()) }}.</p>
+
+                    <div class="space-y-3">
+                        @foreach($ranges as $range)
+                            <div class="border border-gray-200 p-4 {{ $range['includes_today'] ? 'ring-2 ring-purple-400 bg-purple-50' : 'bg-gray-50' }}">
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            @if($range['start_date']->equalTo($range['end_date']))
+                                                <span class="font-semibold text-gray-900">{{ $range['start_date']->format('D, j M Y') }}</span>
+                                            @else
+                                                <span class="font-semibold text-gray-900">{{ $range['start_date']->format('D j M') }} → {{ $range['end_date']->format('D j M Y') }}</span>
+                                                <span class="text-xs text-gray-400">({{ $range['count'] }} days)</span>
+                                            @endif
+                                            @if($range['includes_today'])
+                                                <span class="inline-flex items-center px-2 py-0.5 text-xs font-bold bg-purple-600 text-white">TODAY</span>
+                                            @endif
+                                        </div>
+                                        <p class="text-sm text-gray-700 mt-1">
+                                            <span class="font-medium">{{ $range['leader']->display_name }}</span>
+                                            <span class="text-gray-400 mx-1">·</span>
+                                            <span class="text-gray-600">{{ $range['phone'] }}</span>
+                                        </p>
+                                        @if($range['notes'])
+                                            <p class="text-xs text-gray-500 mt-1">{{ $range['notes'] }}</p>
                                         @endif
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {{ $contact->leader->display_name }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $contact->leader->email }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {{ $contact->phone }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500">
-                                        {{ $contact->notes ?? '—' }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        <form method="POST" action="{{ route('contacts.destroy', $contact) }}"
-                                              onsubmit="return confirm('Remove this entry?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-800 text-xs font-medium">
-                                                Remove
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                    </div>
+                                    <form method="POST" action="{{ route('contacts.bulk-destroy') }}"
+                                          onsubmit="return confirm('Remove {{ $range['count'] === 1 ? 'this entry' : 'all ' . $range['count'] . ' days in this block' }}?')">
+                                        @csrf
+                                        <input type="hidden" name="leader_id" value="{{ $range['leader_id'] }}">
+                                        <input type="hidden" name="date_from" value="{{ $range['start_date']->toDateString() }}">
+                                        <input type="hidden" name="date_to" value="{{ $range['end_date']->toDateString() }}">
+                                        <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 border border-red-200 hover:bg-red-50 transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                            Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             @endif
         </div>

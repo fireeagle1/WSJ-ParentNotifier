@@ -77,4 +77,25 @@ class HomeContactController extends Controller
         return redirect()->route('contacts.index')
             ->with('success', 'Home contact entry removed.');
     }
+
+    /**
+     * Bulk remove home contact entries by leader and date range.
+     */
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'leader_id' => ['required', 'exists:leaders,id'],
+            'date_from' => ['required', 'date'],
+            'date_to' => ['required', 'date', 'after_or_equal:date_from'],
+        ]);
+
+        $deleted = HomeContact::where('leader_id', $validated['leader_id'])
+            ->whereBetween('date', [$validated['date_from'], $validated['date_to']])
+            ->delete();
+
+        $days = $deleted === 1 ? '1 entry' : "{$deleted} entries";
+
+        return redirect()->route('contacts.index')
+            ->with('success', "Removed {$days} from the schedule.");
+    }
 }

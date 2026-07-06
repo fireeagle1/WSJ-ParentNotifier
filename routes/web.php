@@ -69,6 +69,7 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::get('/contacts', [HomeContactController::class, 'index'])->name('contacts.index');
     Route::post('/contacts', [HomeContactController::class, 'store'])->name('contacts.store');
     Route::delete('/contacts/{contact}', [HomeContactController::class, 'destroy'])->name('contacts.destroy');
+    Route::post('/contacts/bulk-delete', [HomeContactController::class, 'bulkDestroy'])->name('contacts.bulk-destroy');
 
     // Settings
     Route::get('/settings', [LeaderController::class, 'settings'])->name('leaders.settings');
