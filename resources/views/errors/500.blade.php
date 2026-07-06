@@ -11,7 +11,7 @@
         <div class="text-6xl font-bold text-gray-500 mb-4">500</div>
         <h1 class="text-2xl font-semibold text-gray-800 mb-2">Something Went Wrong</h1>
         <p class="text-gray-600 mb-6">Please try again later.</p>
-        <a href="{{ url('/') }}" class="inline-block bg-[#7413dc] text-white px-6 py-2 hover:bg-purple-800 transition">
+        <a href="{{ url('/') }}" class="inline-block bg-wsj-navy text-white px-6 py-2 hover:bg-wsj-navy/90 transition">
             Go to Home
         </a>
     </div>

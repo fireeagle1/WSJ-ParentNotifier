@@ -44,7 +44,7 @@
             You are receiving this email because you were registered on {{ $portalName }}.
         </p>
         <p style="font-size: 10px; color: #cbd5e0; margin: 10px 0 0 0;">
-            Kindly provided by <a href="https://ckenterprises.co.uk" style="color: #7413dc; text-decoration: none;">CK Enterprises UK</a>
+            Kindly provided by <a href="https://ckenterprises.co.uk" style="color: #003982; text-decoration: none;">CK Enterprises UK</a>
         </p>
     </div>
 </body>

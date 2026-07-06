@@ -49,7 +49,7 @@
 </head>
 <body class="bg-gray-50 font-sans antialiased min-h-screen">
     <!-- Header -->
-    <header class="bg-[#7413dc] shadow-sm">
+    <header class="bg-wsj-navy shadow-sm">
         @php
             $headerImage = \App\Models\Setting::where('key', 'header_image_path')->value('value');
             $brandName = \App\Models\Setting::where('key', 'brand_name')->value('value') ?? 'Scouts';
@@ -79,15 +79,15 @@
                     @endif
                     <div class="flex flex-col leading-tight">
                         <span class="text-white font-semibold text-lg">{{ $brandName }}</span>
-                        <span class="text-purple-300 text-[11px] font-medium">Jamboree Updates</span>
+                        <span class="text-blue-300 text-[11px] font-medium">Jamboree Updates</span>
                     </div>
                 </div>
                 @if(isset($token))
                 <nav class="flex items-center gap-4">
-                    <a href="{{ route('feed.index', $token) }}" class="text-sm font-medium {{ request()->routeIs('feed.index') ? 'text-white' : 'text-purple-200 hover:text-white' }} transition">Feed</a>
-                    <a href="{{ route('feed.map', $token) }}" class="text-sm font-medium {{ request()->routeIs('feed.map') ? 'text-white' : 'text-purple-200 hover:text-white' }} transition">Map</a>
-                    <a href="{{ route('feed.leaders', $token) }}" class="text-sm font-medium {{ request()->routeIs('feed.leaders') ? 'text-white' : 'text-purple-200 hover:text-white' }} transition">Leaders</a>
-                    <a href="{{ route('feed.contacts', $token) }}" class="text-sm font-medium {{ request()->routeIs('feed.contacts') ? 'text-white' : 'text-purple-200 hover:text-white' }} transition">Contact</a>
+                    <a href="{{ route('feed.index', $token) }}" class="text-sm font-medium {{ request()->routeIs('feed.index') ? 'text-white' : 'text-blue-200 hover:text-white' }} transition">Feed</a>
+                    <a href="{{ route('feed.map', $token) }}" class="text-sm font-medium {{ request()->routeIs('feed.map') ? 'text-white' : 'text-blue-200 hover:text-white' }} transition">Map</a>
+                    <a href="{{ route('feed.leaders', $token) }}" class="text-sm font-medium {{ request()->routeIs('feed.leaders') ? 'text-white' : 'text-blue-200 hover:text-white' }} transition">Leaders</a>
+                    <a href="{{ route('feed.contacts', $token) }}" class="text-sm font-medium {{ request()->routeIs('feed.contacts') ? 'text-white' : 'text-blue-200 hover:text-white' }} transition">Contact</a>
                 </nav>
                 @endif
             </div>
@@ -103,7 +103,7 @@
     <footer class="border-t border-gray-200 mt-8">
         <div class="max-w-3xl mx-auto px-4 py-4 sm:px-6 text-center">
             <p class="text-sm text-gray-500">&copy; {{ date('Y') }} {{ $brandName }}</p>
-            <p class="text-xs text-gray-400 mt-1">Kindly provided by <a href="https://ckenterprises.co.uk" class="text-purple-500 hover:text-purple-700 transition" target="_blank" rel="noopener">CK Enterprises UK</a></p>
+            <p class="text-xs text-gray-400 mt-1">Kindly provided by <a href="https://ckenterprises.co.uk" class="text-brand-500 hover:text-brand-700 transition" target="_blank" rel="noopener">CK Enterprises UK</a></p>
         </div>
     </footer>
 

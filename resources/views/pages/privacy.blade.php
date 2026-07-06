@@ -7,10 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
-    <header class="bg-[#7413dc]">
+    <header class="bg-wsj-navy">
         <div class="max-w-4xl mx-auto px-4 py-5 flex items-center justify-between">
             <a href="{{ route('landing') }}" class="text-xl font-bold text-white">{{ \App\Models\Setting::where('key', 'brand_name')->value('value') ?? 'Scouts' }}</a>
-            <a href="{{ route('login') }}" class="text-sm font-medium text-purple-200 hover:text-white transition">
+            <a href="{{ route('login') }}" class="text-sm font-medium text-blue-200 hover:text-white transition">
                 Leader Login →
             </a>
         </div>

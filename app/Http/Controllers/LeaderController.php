@@ -12,21 +12,18 @@ use Illuminate\View\View;
 class LeaderController extends Controller
 {
     /**
-     * Display a listing of all leaders (admin only).
+     * Display a listing of all leaders (accessible to all authenticated leaders).
      */
     public function index(): View
     {
-        if (!auth()->user()->is_admin) {
-            abort(403);
-        }
-
         $leaders = Leader::orderBy('created_at', 'desc')->get();
 
         return view('dashboard.leaders.index', compact('leaders'));
     }
 
     /**
-     * Create a new leader with email, password, and display_name (admin only).
+     * Create a new leader with email and display_name (admin only).
+     * No password is set — the leader must reset it themselves.
      */
     public function store(Request $request): RedirectResponse
     {
@@ -36,19 +33,23 @@ class LeaderController extends Controller
 
         $validated = $request->validate([
             'email' => ['required', 'email', 'unique:leaders', 'max:255'],
-            'password' => ['required', 'min:8', 'max:128'],
             'display_name' => ['required', 'max:255'],
         ]);
 
         Leader::create([
             'email' => $validated['email'],
-            'password' => $validated['password'],
+            'password' => '', // No password set — leader must reset
             'display_name' => $validated['display_name'],
             'is_admin' => false,
         ]);
 
+        // Automatically send a password reset link
+        \Illuminate\Support\Facades\Password::broker('leaders')->sendResetLink(
+            ['email' => $validated['email']]
+        );
+
         return redirect()->route('leaders.index')
-            ->with('success', 'Leader created successfully.');
+            ->with('success', 'Leader created. A password reset link has been sent to their email.');
     }
 
     /**
@@ -69,6 +70,69 @@ class LeaderController extends Controller
 
         return redirect()->route('leaders.index')
             ->with('success', 'Leader removed successfully.');
+    }
+
+    /**
+     * Send a password reset link to a leader.
+     * Any authenticated leader can trigger this for any other leader.
+     */
+    public function sendPasswordReset(Leader $leader): RedirectResponse
+    {
+        $status = \Illuminate\Support\Facades\Password::broker('leaders')->sendResetLink(
+            ['email' => $leader->email]
+        );
+
+        if ($status === \Illuminate\Support\Facades\Password::RESET_LINK_SENT) {
+            return redirect()->route('leaders.index')
+                ->with('success', "Password reset link sent to {$leader->display_name}.");
+        }
+
+        return redirect()->route('leaders.index')
+            ->with('error', "Failed to send reset link. Please try again later.");
+    }
+
+    /**
+     * Show the edit bio form for a leader.
+     * Any authenticated leader can edit any other leader's bio.
+     */
+    public function editBio(Leader $leader): View
+    {
+        return view('dashboard.leaders.edit-bio', compact('leader'));
+    }
+
+    /**
+     * Update another leader's bio information.
+     */
+    public function updateBio(Request $request, Leader $leader): RedirectResponse
+    {
+        $validated = $request->validate([
+            'display_name' => ['required', 'max:255'],
+            'role' => ['nullable', 'max:255'],
+            'bio' => ['nullable', 'max:1000'],
+            'phone' => ['nullable', 'max:50'],
+            'photo' => ['nullable', 'file', 'max:5120', 'mimes:jpeg,png,webp'],
+        ]);
+
+        $updateData = [
+            'display_name' => $validated['display_name'],
+            'role' => $validated['role'] ?? null,
+            'bio' => $validated['bio'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+        ];
+
+        if ($request->hasFile('photo')) {
+            // Delete old photo if exists
+            if ($leader->photo_path && Storage::disk('public')->exists($leader->photo_path)) {
+                Storage::disk('public')->delete($leader->photo_path);
+            }
+            $path = $request->file('photo')->store('leaders', 'public');
+            $updateData['photo_path'] = $path;
+        }
+
+        $leader->update($updateData);
+
+        return redirect()->route('leaders.index')
+            ->with('success', "{$leader->display_name}'s profile updated successfully.");
     }
 
     /**

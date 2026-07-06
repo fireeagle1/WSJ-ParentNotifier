@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class Guardian extends Model
+class Guardian extends Authenticatable implements CanResetPasswordContract
 {
-    use HasFactory;
+    use HasFactory, Notifiable, CanResetPassword;
 
     /**
      * The table associated with the model.
@@ -23,6 +26,15 @@ class Guardian extends Model
         'young_person_name',
         'access_token',
         'is_revoked',
+        'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     */
+    protected $hidden = [
+        'password',
+        'access_token',
     ];
 
     /**
@@ -34,6 +46,7 @@ class Guardian extends Model
     {
         return [
             'is_revoked' => 'boolean',
+            'password' => 'hashed',
         ];
     }
 
@@ -43,5 +56,13 @@ class Guardian extends Model
     public function notificationLogs(): HasMany
     {
         return $this->hasMany(NotificationLog::class, 'parent_id');
+    }
+
+    /**
+     * Determine if the parent has set a password.
+     */
+    public function hasPassword(): bool
+    {
+        return !empty($this->password);
     }
 }

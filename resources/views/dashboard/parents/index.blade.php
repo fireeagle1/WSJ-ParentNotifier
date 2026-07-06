@@ -150,15 +150,25 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         @if (!$parent->is_revoked)
-                                            <form method="POST" action="{{ route('parents.destroy', $parent) }}"
-                                                  onsubmit="return confirm('Are you sure you want to revoke access for this parent?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                        class="inline-flex items-center px-3 py-1.5 bg-red-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                                    Revoke
-                                                </button>
-                                            </form>
+                                            <div class="flex items-center gap-2">
+                                                <form method="POST" action="{{ route('parents.send-reset', $parent) }}"
+                                                      onsubmit="return confirm('Send a password reset link to {{ $parent->email }}?')">
+                                                    @csrf
+                                                    <button type="submit"
+                                                            class="inline-flex items-center px-3 py-1.5 bg-wsj-orange border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-wsj-orange/90 focus:outline-none focus:ring-2 focus:ring-wsj-orange focus:ring-offset-2 transition ease-in-out duration-150">
+                                                        Send Reset
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="{{ route('parents.destroy', $parent) }}"
+                                                      onsubmit="return confirm('Are you sure you want to revoke access for this parent?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                            class="inline-flex items-center px-3 py-1.5 bg-red-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                                        Revoke
+                                                    </button>
+                                                </form>
+                                            </div>
                                         @else
                                             <span class="text-gray-400 text-xs italic">No actions available</span>
                                         @endif

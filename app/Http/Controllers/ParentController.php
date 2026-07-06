@@ -67,6 +67,24 @@ class ParentController extends Controller
     }
 
     /**
+     * Send a password reset link to a parent/guardian.
+     */
+    public function sendPasswordReset(Guardian $parent): RedirectResponse
+    {
+        $status = \Illuminate\Support\Facades\Password::broker('parents')->sendResetLink(
+            ['email' => $parent->email]
+        );
+
+        if ($status === \Illuminate\Support\Facades\Password::RESET_LINK_SENT) {
+            return redirect()->route('parents.index')
+                ->with('success', "Password reset link sent to {$parent->email}.");
+        }
+
+        return redirect()->route('parents.index')
+            ->with('error', "Failed to send reset link. Please try again later.");
+    }
+
+    /**
      * Toggle the signup_enabled setting value.
      * When enabling, generate a new unique sign-up link token.
      */

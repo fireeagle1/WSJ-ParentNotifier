@@ -11,7 +11,7 @@
         <div class="text-6xl font-bold text-red-500 mb-4">403</div>
         <h1 class="text-2xl font-semibold text-gray-800 mb-2">Access Denied</h1>
         <p class="text-gray-600 mb-6">This link may be invalid or has been revoked.</p>
-        <a href="{{ url('/') }}" class="inline-block bg-[#7413dc] text-white px-6 py-2 hover:bg-purple-800 transition">
+        <a href="{{ url('/') }}" class="inline-block bg-wsj-navy text-white px-6 py-2 hover:bg-wsj-navy/90 transition">
             Go to Home
         </a>
     </div>

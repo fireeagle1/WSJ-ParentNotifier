@@ -53,12 +53,16 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::get('/parents', [ParentController::class, 'index'])->name('parents.index');
     Route::post('/parents', [ParentController::class, 'store'])->name('parents.store');
     Route::delete('/parents/{parent}', [ParentController::class, 'destroy'])->name('parents.destroy');
+    Route::post('/parents/{parent}/send-reset', [ParentController::class, 'sendPasswordReset'])->name('parents.send-reset');
     Route::post('/parents/toggle-signup', [ParentController::class, 'toggleSignup'])->name('parents.toggle-signup');
 
     // Leaders management
     Route::get('/leaders', [LeaderController::class, 'index'])->name('leaders.index');
     Route::post('/leaders', [LeaderController::class, 'store'])->name('leaders.store');
     Route::post('/leaders/{leader}/toggle-visibility', [LeaderController::class, 'toggleVisibility'])->name('leaders.toggle-visibility');
+    Route::post('/leaders/{leader}/send-reset', [LeaderController::class, 'sendPasswordReset'])->name('leaders.send-reset');
+    Route::get('/leaders/{leader}/edit-bio', [LeaderController::class, 'editBio'])->name('leaders.edit-bio');
+    Route::put('/leaders/{leader}/update-bio', [LeaderController::class, 'updateBio'])->name('leaders.update-bio');
     Route::delete('/leaders/{leader}', [LeaderController::class, 'destroy'])->name('leaders.destroy');
 
     // Home contacts schedule

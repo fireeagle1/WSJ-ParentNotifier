@@ -17,9 +17,11 @@
             </div>
         @endif
 
-        <!-- Add Leader Form -->
+        <!-- Add Leader Form (admin only) -->
+        @if(auth()->user()->is_admin)
         <div class="bg-white overflow-hidden shadow-sm p-6 mb-6">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Add Leader</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Add Leader</h3>
+            <p class="text-sm text-gray-500 mb-4">A password reset link will be sent to the new leader's email automatically.</p>
 
             @if ($errors->any())
                 <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800">
@@ -45,17 +47,6 @@
                            placeholder="Email address">
                 </div>
                 <div class="flex-1">
-                    <label for="password" class="sr-only">Password</label>
-                    <input type="password"
-                           id="password"
-                           name="password"
-                           required
-                           minlength="8"
-                           maxlength="128"
-                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-                           placeholder="Password (min 8 characters)">
-                </div>
-                <div class="flex-1">
                     <label for="display_name" class="sr-only">Display Name</label>
                     <input type="text"
                            id="display_name"
@@ -72,6 +63,7 @@
                 </button>
             </form>
         </div>
+        @endif
 
         <!-- Leaders Table -->
         <div class="bg-white overflow-hidden shadow-sm">
@@ -124,6 +116,7 @@
                                         {{ $leader->role ?? '—' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        @if(auth()->user()->is_admin)
                                         <form method="POST" action="{{ route('leaders.toggle-visibility', $leader) }}">
                                             @csrf
                                             <button type="submit"
@@ -138,21 +131,45 @@
                                                 @endif
                                             </button>
                                         </form>
+                                        @else
+                                            @if($leader->visible_to_parents)
+                                                <span class="text-green-700 text-xs font-medium">✓ Visible</span>
+                                            @else
+                                                <span class="text-gray-500 text-xs font-medium">✗ Hidden</span>
+                                            @endif
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        @if ($leader->id !== auth()->id())
-                                            <form method="POST" action="{{ route('leaders.destroy', $leader) }}"
-                                                  onsubmit="return confirm('Are you sure you want to remove this leader?')">
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <!-- Edit Bio (any leader can edit any other leader's bio) -->
+                                            <a href="{{ route('leaders.edit-bio', $leader) }}"
+                                               class="inline-flex items-center px-3 py-1.5 bg-brand-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                                Edit Bio
+                                            </a>
+
+                                            <!-- Send Password Reset -->
+                                            <form method="POST" action="{{ route('leaders.send-reset', $leader) }}"
+                                                  onsubmit="return confirm('Send a password reset link to {{ $leader->display_name }}?')">
                                                 @csrf
-                                                @method('DELETE')
                                                 <button type="submit"
-                                                        class="inline-flex items-center px-3 py-1.5 bg-red-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                                    Remove
+                                                        class="inline-flex items-center px-3 py-1.5 bg-wsj-orange border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-wsj-orange/90 focus:outline-none focus:ring-2 focus:ring-wsj-orange focus:ring-offset-2 transition ease-in-out duration-150">
+                                                    Send Reset
                                                 </button>
                                             </form>
-                                        @else
-                                            <span class="text-gray-400 text-xs italic">Cannot remove self</span>
-                                        @endif
+
+                                            <!-- Delete (admin only, not self) -->
+                                            @if (auth()->user()->is_admin && $leader->id !== auth()->id())
+                                                <form method="POST" action="{{ route('leaders.destroy', $leader) }}"
+                                                      onsubmit="return confirm('Are you sure you want to remove this leader?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                            class="inline-flex items-center px-3 py-1.5 bg-red-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                                        Remove
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

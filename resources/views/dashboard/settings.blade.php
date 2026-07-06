@@ -42,16 +42,16 @@
                         @if(auth()->user()->photo_path)
                             <img src="{{ asset('storage/' . auth()->user()->photo_path) }}"
                                  alt="Profile"
-                                 class="w-16 h-16 object-cover border-2 border-purple-200">
+                                 class="w-16 h-16 object-cover border-2 border-brand-200">
                         @else
-                            <div class="w-16 h-16 bg-purple-100 flex items-center justify-center">
-                                <span class="text-purple-700 font-bold text-xl">{{ substr(auth()->user()->display_name, 0, 1) }}</span>
+                            <div class="w-16 h-16 bg-brand-100 flex items-center justify-center">
+                                <span class="text-brand-700 font-bold text-xl">{{ substr(auth()->user()->display_name, 0, 1) }}</span>
                             </div>
                         @endif
                         <input type="file"
                                name="photo"
                                accept="image/jpeg,image/png,image/webp"
-                               class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100">
+                               class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
                     </div>
                     <p class="mt-1 text-xs text-gray-500">JPEG, PNG, or WebP. Max 5 MB.</p>
                 </div>
@@ -65,7 +65,7 @@
                            value="{{ old('display_name', auth()->user()->display_name) }}"
                            required
                            maxlength="255"
-                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
                 </div>
 
                 <!-- Role -->
@@ -76,7 +76,7 @@
                            name="role"
                            value="{{ old('role', auth()->user()->role) }}"
                            maxlength="255"
-                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                            placeholder="e.g. Scout Leader, Assistant Leader, Camp Warden">
                 </div>
 
@@ -87,7 +87,7 @@
                               name="bio"
                               rows="3"
                               maxlength="1000"
-                              class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                              class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                               placeholder="A short bio about yourself that parents can read...">{{ old('bio', auth()->user()->bio) }}</textarea>
                 </div>
 
@@ -99,7 +99,7 @@
                            name="phone"
                            value="{{ old('phone', auth()->user()->phone) }}"
                            maxlength="50"
-                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                            placeholder="+44 7xxx xxx xxx">
                 </div>
 
@@ -110,7 +110,7 @@
                 </div>
 
                 <button type="submit"
-                        class="inline-flex items-center px-4 py-2 bg-purple-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        class="inline-flex items-center px-4 py-2 bg-brand-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition ease-in-out duration-150">
                     Update Profile
                 </button>
             </form>
@@ -148,14 +148,14 @@
                     @php $logoPath = \App\Models\Setting::where('key', 'logo_path')->value('value'); @endphp
                     @if($logoPath)
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="{{ asset('storage/' . $logoPath) }}" alt="Logo" class="h-10 w-10 object-contain bg-purple-100 p-1">
+                            <img src="{{ asset('storage/' . $logoPath) }}" alt="Logo" class="h-10 w-10 object-contain bg-brand-100 p-1">
                             <span class="text-xs text-gray-500">Current logo</span>
                         </div>
                     @endif
                     <input type="file"
                            name="logo"
                            accept="image/jpeg,image/png,image/webp,image/svg+xml"
-                           class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100">
+                           class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
                     <p class="mt-1 text-xs text-gray-500">PNG, SVG, JPEG, or WebP. Max 2 MB. Square works best (e.g. 200×200px).</p>
                 </div>
 
@@ -165,7 +165,7 @@
                     <input type="file"
                            name="header_image"
                            accept="image/jpeg,image/png,image/webp"
-                           class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100">
+                           class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100">
                     <p class="mt-1 text-xs text-gray-500">JPEG, PNG, or WebP. Max 5 MB. Recommended: 1200×200px.</p>
                 </div>
 
@@ -178,7 +178,7 @@
                            value="{{ old('brand_name', $brandName) }}"
                            required
                            maxlength="255"
-                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                            placeholder="e.g. 1st Exampletown Scouts">
                 </div>
 
@@ -191,12 +191,12 @@
                                name="brand_color"
                                value="{{ old('brand_color', $brandColor) }}"
                                class="h-10 w-14 border border-gray-300 cursor-pointer">
-                        <span class="text-sm text-gray-500">Default: #7413dc (Scouts Purple)</span>
+                        <span class="text-sm text-gray-500">Default: #003982 (WSJ Navy)</span>
                     </div>
                 </div>
 
                 <button type="submit"
-                        class="inline-flex items-center px-4 py-2 bg-purple-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        class="inline-flex items-center px-4 py-2 bg-brand-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition ease-in-out duration-150">
                     Update Branding
                 </button>
             </form>

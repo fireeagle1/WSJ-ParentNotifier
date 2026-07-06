@@ -1,11 +1,11 @@
-<article id="post-{{ $post->id }}" class="bg-white shadow-sm border {{ $post->is_pinned ? 'border-purple-200 ring-1 ring-purple-100' : 'border-gray-100' }} overflow-hidden">
+<article id="post-{{ $post->id }}" class="bg-white shadow-sm border {{ $post->is_pinned ? 'border-brand-200 ring-1 ring-brand-100' : 'border-gray-100' }} overflow-hidden">
     {{-- Pinned badge --}}
     @if($post->is_pinned)
-        <div class="px-4 py-2 bg-purple-50 border-b border-purple-100 flex items-center gap-1.5">
-            <svg class="w-3.5 h-3.5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+        <div class="px-4 py-2 bg-brand-50 border-b border-brand-100 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-brand-600" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
             </svg>
-            <span class="text-xs font-semibold text-purple-700">Pinned</span>
+            <span class="text-xs font-semibold text-brand-700">Pinned</span>
         </div>
     @endif
 
@@ -47,9 +47,9 @@
             @if($post->leader->photo_path)
                 <img src="{{ asset('storage/' . $post->leader->photo_path) }}"
                      alt="{{ $post->leader->display_name }}"
-                     class="w-10 h-10 object-cover ring-2 ring-purple-100">
+                     class="w-10 h-10 object-cover ring-2 ring-brand-100">
             @else
-                <div class="w-10 h-10 bg-[#7413dc] flex items-center justify-center text-white font-semibold text-sm ring-2 ring-purple-100">
+                <div class="w-10 h-10 bg-wsj-navy flex items-center justify-center text-white font-semibold text-sm ring-2 ring-blue-100">
                     {{ strtoupper(substr($post->leader->display_name, 0, 1)) }}
                 </div>
             @endif
@@ -67,7 +67,7 @@
             <div class="grid {{ $post->photos->count() === 1 ? 'grid-cols-1' : 'grid-cols-2' }} gap-1.5 mb-4 overflow-hidden">
                 @foreach($post->photos as $photo)
                     <button type="button"
-                            class="aspect-square overflow-hidden cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 {{ $post->photos->count() === 1 ? 'aspect-video' : '' }}"
+                            class="aspect-square overflow-hidden cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 {{ $post->photos->count() === 1 ? 'aspect-video' : '' }}"
                             onclick="openLightbox('{{ asset('storage/photos/' . $photo->filename) }}')"
                             aria-label="View full size photo">
                         <img src="{{ asset('storage/photos/' . $photo->filename) }}"

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Set New Password — {{ config('app.name', 'Scouts') }}</title>
+
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=nunito-sans:400,500,600,700&display=swap" rel="stylesheet" />
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="font-sans text-gray-900 antialiased">
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-50">
+        <div class="w-full bg-wsj-navy py-6 mb-8">
+            <div class="text-center">
+                <h1 class="text-2xl font-bold text-white">
+                    {{ \App\Models\Setting::where('key', 'brand_name')->value('value') ?? 'Scouts' }}
+                </h1>
+                <p class="text-blue-200 text-sm mt-1">Set New Password</p>
+            </div>
+        </div>
+
+        <div class="w-full sm:max-w-md px-6 py-6 bg-white shadow-sm overflow-hidden border border-gray-200">
+            <form method="POST" action="{{ route('password.update') }}">
+                @csrf
+
+                <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+                <!-- Email -->
+                <div>
+                    <x-input-label for="email" :value="__('Email')" />
+                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                        :value="old('email', $request->email)" required autofocus maxlength="255" />
+                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                </div>
+
+                <!-- Password -->
+                <div class="mt-4">
+                    <x-input-label for="password" :value="__('New Password')" />
+                    <x-text-input id="password" class="block mt-1 w-full" type="password"
+                        name="password" required maxlength="128" />
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="mt-4">
+                    <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+                    <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
+                        name="password_confirmation" required maxlength="128" />
+                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                </div>
+
+                <div class="flex items-center justify-end mt-6">
+                    <button type="submit" class="w-full justify-center inline-flex items-center px-4 py-2 bg-wsj-navy border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-wsj-navy/90 focus:outline-none focus:ring-2 focus:ring-wsj-navy focus:ring-offset-2 transition ease-in-out duration-150">
+                        {{ __('Reset Password') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

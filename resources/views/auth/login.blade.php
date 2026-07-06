@@ -7,19 +7,19 @@
     <title>Leader Login — {{ config('app.name', 'Scouts') }}</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=nunito-sans:400,500,600,700&display=swap" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans text-gray-900 antialiased">
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-50">
         <!-- Purple Brand Header -->
-        <div class="w-full bg-[#7413dc] py-6 mb-8">
+        <div class="w-full bg-wsj-navy py-6 mb-8">
             <div class="text-center">
                 <h1 class="text-2xl font-bold text-white">
                     {{ \App\Models\Setting::where('key', 'brand_name')->value('value') ?? 'Scouts' }}
                 </h1>
-                <p class="text-purple-200 text-sm mt-1">Leader Portal</p>
+                <p class="text-blue-200 text-sm mt-1">Leader Portal</p>
             </div>
         </div>
 
@@ -51,7 +51,10 @@
                 </div>
 
                 <div class="flex items-center justify-end mt-6">
-                    <button type="submit" class="w-full justify-center inline-flex items-center px-4 py-2 bg-[#7413dc] border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-purple-800 focus:bg-purple-800 active:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-[#7413dc] focus:ring-offset-2 transition ease-in-out duration-150">
+                    <a href="{{ route('password.request') }}" class="text-sm text-brand-600 hover:text-brand-800 underline mr-4">
+                        Forgot password?
+                    </a>
+                    <button type="submit" class="w-full justify-center inline-flex items-center px-4 py-2 bg-wsj-navy border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-wsj-navy/90 focus:bg-wsj-navy/90 active:bg-wsj-navy focus:outline-none focus:ring-2 focus:ring-wsj-navy focus:ring-offset-2 transition ease-in-out duration-150">
                         {{ __('Log in') }}
                     </button>
                 </div>

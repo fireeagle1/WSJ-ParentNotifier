@@ -42,6 +42,10 @@ return [
             'driver' => 'session',
             'provider' => 'leaders',
         ],
+        'parent' => [
+            'driver' => 'session',
+            'provider' => 'parents',
+        ],
     ],
 
     /*
@@ -65,6 +69,10 @@ return [
         'leaders' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', Leader::class),
+        ],
+        'parents' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\Guardian::class,
         ],
     ],
 
@@ -91,6 +99,12 @@ return [
         'leaders' => [
             'provider' => 'leaders',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'parents' => [
+            'provider' => 'parents',
+            'table' => 'parent_password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
         ],
