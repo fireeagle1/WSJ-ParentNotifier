@@ -11,6 +11,12 @@
             </div>
         @endif
 
+        @if (session('error'))
+            <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <!-- Add Contact Entry Form -->
         <div class="bg-white overflow-hidden shadow-sm p-6 mb-6">
             <h3 class="text-lg font-medium text-gray-900 mb-2">Add Schedule Entry</h3>
@@ -143,9 +149,9 @@
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center gap-2 flex-wrap">
                                             @if($range['start_date']->equalTo($range['end_date']))
-                                                <span class="font-semibold text-gray-900">{{ $range['start_date']->format('D, j M Y') }}</span>
+                                                <span class="font-semibold text-gray-900">{{ $range['start_date']->format('jS M Y') }}</span>
                                             @else
-                                                <span class="font-semibold text-gray-900">{{ $range['start_date']->format('D j M') }} → {{ $range['end_date']->format('D j M Y') }}</span>
+                                                <span class="font-semibold text-gray-900">{{ $range['start_date']->format('jS') }} to {{ $range['end_date']->format('jS M Y') }}</span>
                                                 <span class="text-xs text-gray-400">({{ $range['count'] }} days)</span>
                                             @endif
                                             @if($range['includes_today'])
@@ -154,6 +160,8 @@
                                         </div>
                                         <p class="text-sm text-gray-700 mt-1">
                                             <span class="font-medium">{{ $range['leader']->display_name }}</span>
+                                            <span class="text-gray-400 mx-1">·</span>
+                                            <span class="text-gray-500">{{ $range['leader']->email }}</span>
                                             <span class="text-gray-400 mx-1">·</span>
                                             <span class="text-gray-600">{{ $range['phone'] }}</span>
                                         </p>

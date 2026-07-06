@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class HomeContactController extends Controller
@@ -44,27 +45,35 @@ class HomeContactController extends Controller
         $period = CarbonPeriod::create($from, $to);
 
         $created = 0;
-        foreach ($period as $date) {
-            // Skip if an entry already exists for this leader on this date
-            $exists = HomeContact::where('leader_id', $validated['leader_id'])
-                ->where('date', $date->toDateString())
-                ->exists();
+        $overwritten = 0;
 
-            if (!$exists) {
-                HomeContact::create([
-                    'leader_id' => $validated['leader_id'],
-                    'date' => $date->toDateString(),
-                    'phone' => $validated['phone'],
-                    'notes' => $validated['notes'],
-                ]);
-                $created++;
+        foreach ($period as $date) {
+            // Remove any existing entry for this date (overwrite)
+            $existing = HomeContact::where('date', $date->toDateString())->first();
+
+            if ($existing) {
+                $existing->delete();
+                $overwritten++;
             }
+
+            HomeContact::create([
+                'leader_id' => $validated['leader_id'],
+                'date' => $date->toDateString(),
+                'phone' => $validated['phone'],
+                'notes' => $validated['notes'],
+            ]);
+            $created++;
         }
 
         $days = $created === 1 ? '1 day' : "{$created} days";
+        $message = "Home contact schedule added for {$days}.";
+
+        if ($overwritten > 0) {
+            $message .= " ({$overwritten} existing " . Str::plural('entry', $overwritten) . " replaced.)";
+        }
 
         return redirect()->route('contacts.index')
-            ->with('success', "Home contact schedule added for {$days}.");
+            ->with('success', $message);
     }
 
     /**
