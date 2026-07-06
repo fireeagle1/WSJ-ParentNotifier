@@ -14,36 +14,71 @@
             <p class="text-gray-500 text-sm">No home contact schedule has been published yet.</p>
         </div>
     @else
+        @php
+            // Group consecutive dates by leader into date ranges
+            $ranges = collect();
+            $currentRange = null;
+
+            foreach ($contacts as $contact) {
+                if ($currentRange &&
+                    $currentRange['leader_id'] === $contact->leader_id &&
+                    $currentRange['phone'] === ($contact->leader->phone ?: $contact->phone) &&
+                    $contact->date->diffInDays($currentRange['end_date']) === 1) {
+                    // Extend current range
+                    $currentRange['end_date'] = $contact->date;
+                    $currentRange['includes_today'] = $currentRange['includes_today'] || $contact->date->isToday();
+                } else {
+                    // Save previous range and start new one
+                    if ($currentRange) {
+                        $ranges->push($currentRange);
+                    }
+                    $currentRange = [
+                        'leader_id' => $contact->leader_id,
+                        'leader' => $contact->leader,
+                        'start_date' => $contact->date,
+                        'end_date' => $contact->date,
+                        'phone' => $contact->leader->phone ?: $contact->phone,
+                        'notes' => $contact->notes,
+                        'includes_today' => $contact->date->isToday(),
+                    ];
+                }
+            }
+            if ($currentRange) {
+                $ranges->push($currentRange);
+            }
+        @endphp
+
         <div class="space-y-3">
-            @foreach($contacts as $contact)
-                <div class="bg-white shadow-sm border border-gray-200 p-4 {{ $contact->date->isToday() ? 'ring-2 ring-purple-400' : '' }}">
+            @foreach($ranges as $range)
+                <div class="bg-white shadow-sm border border-gray-200 p-4 {{ $range['includes_today'] ? 'ring-2 ring-purple-400' : '' }}">
                     <div class="flex items-center justify-between">
                         <div>
                             <div class="flex items-center gap-2">
-                                <span class="text-sm font-semibold text-gray-900">{{ $contact->date->format('l, j M Y') }}</span>
-                                @if($contact->date->isToday())
+                                @if($range['start_date']->equalTo($range['end_date']))
+                                    <span class="text-sm font-semibold text-gray-900">{{ $range['start_date']->format('l, j M Y') }}</span>
+                                @else
+                                    <span class="text-sm font-semibold text-gray-900">{{ $range['start_date']->format('D j M') }} → {{ $range['end_date']->format('D j M Y') }}</span>
+                                @endif
+                                @if($range['includes_today'])
                                     <span class="inline-flex items-center px-2 py-0.5 text-xs font-bold bg-purple-600 text-white">TODAY</span>
                                 @endif
                             </div>
                             <p class="text-sm text-gray-700 mt-1">
-                                <span class="font-medium">{{ $contact->leader->display_name }}</span>
-                                @if($contact->leader->role)
-                                    <span class="text-gray-400">· {{ $contact->leader->role }}</span>
+                                <span class="font-medium">{{ $range['leader']->display_name }}</span>
+                                @if($range['leader']->role)
+                                    <span class="text-gray-400">· {{ $range['leader']->role }}</span>
                                 @endif
                             </p>
-                            @if($contact->notes)
-                                <p class="text-xs text-gray-500 mt-1">{{ $contact->notes }}</p>
+                            @if($range['notes'])
+                                <p class="text-xs text-gray-500 mt-1">{{ $range['notes'] }}</p>
                             @endif
                         </div>
-                        @php
-                            $contactPhone = $contact->leader->phone ?: $contact->phone;
-                        @endphp
-                        <a href="tel:{{ $contactPhone }}"
+                        <a href="tel:{{ $range['phone'] }}"
                            class="inline-flex items-center gap-1.5 px-3 py-2 bg-purple-600 text-white text-sm font-medium hover:bg-purple-700 transition flex-shrink-0">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                             </svg>
-                            {{ $contactPhone }}
+                            {{ $range['phone'] }}
                         </a>
                     </div>
                 </div>

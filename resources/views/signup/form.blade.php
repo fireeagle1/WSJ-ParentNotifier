@@ -9,22 +9,56 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=nunito-sans:400,500,600,700&display=swap" rel="stylesheet" />
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Nunito Sans', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#eef8f8', 100: '#d5eeee', 200: '#aedddd', 300: '#7ac5c5',
+                            400: '#4da8a8', 500: '#088486', 600: '#076e70', 700: '#065a5c',
+                            800: '#054849', 900: '#043a3b', 950: '#022526',
+                        },
+                        wsj: {
+                            purple: '#7413dc', orange: '#ff912a', green: '#205b41',
+                            teal: '#088486', navy: '#003982', blue: '#006ddf',
+                            red: '#ed3f23', yellow: '#ffe627',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
 </head>
 <body class="font-sans antialiased bg-gray-50">
     <div class="min-h-screen flex flex-col items-center justify-center px-4 py-12">
         <div class="w-full max-w-md">
             <!-- Header -->
             <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-14 h-14 bg-purple-100 mb-3">
-                    <svg class="w-7 h-7 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                </div>
-                <h1 class="text-2xl font-bold text-gray-800">{{ config('app.name', 'Jamboree Updates') }}</h1>
+                @php
+                    $logoPath = \App\Models\Setting::where('key', 'logo_path')->value('value');
+                    $brandName = \App\Models\Setting::where('key', 'brand_name')->value('value') ?? config('app.name', 'Jamboree Updates');
+                @endphp
+                @if($logoPath)
+                    <img src="{{ asset('storage/' . $logoPath) }}" alt="{{ $brandName }}" class="w-16 h-16 object-contain mx-auto mb-3">
+                @else
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-brand-100 mb-3 rounded-full">
+                        <svg class="w-9 h-9 text-brand-600" viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 6c-.8 0-1.5.5-1.8 1.2L28 14l-6 3c-.7.4-1.2 1.1-1.2 1.9 0 .8.5 1.5 1.2 1.9l3.5 2C26.5 26 28 29.5 28 33c0 2 .5 3.8 1.3 5.3.5.9 1.5 1.5 2.7 1.5s2.2-.6 2.7-1.5c.8-1.5 1.3-3.3 1.3-5.3 0-3.5 1.5-7 2.5-10.2l3.5-2c.7-.4 1.2-1.1 1.2-1.9 0-.8-.5-1.5-1.2-1.9l-6-3-2.2-6.8C33.5 6.5 32.8 6 32 6z"/>
+                            <path d="M26 44c0 0 2 4 6 4s6-4 6-4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                            <path d="M28 48l-2 6M36 48l2 6M32 49v7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                            <circle cx="32" cy="58" r="2.5"/>
+                            <circle cx="26" cy="56" r="1.5"/>
+                            <circle cx="38" cy="56" r="1.5"/>
+                        </svg>
+                    </div>
+                @endif
+                <h1 class="text-2xl font-bold text-gray-800">{{ $brandName }}</h1>
                 <p class="mt-2 text-gray-600">Parent Sign-Up</p>
             </div>
 
@@ -94,16 +128,28 @@
 
                         <!-- Submit Button -->
                         <button type="submit"
-                                class="w-full px-4 py-2 bg-purple-600 text-white font-semibold hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                class="w-full px-4 py-2 bg-wsj-navy text-white font-semibold hover:bg-[#002a61] focus:outline-none focus:ring-2 focus:ring-wsj-navy focus:ring-offset-2 transition ease-in-out duration-150">
                             Sign Up for Updates
                         </button>
                     </form>
                 @endif
             </div>
 
+            <!-- Privacy Notice -->
+            <div class="mt-6 p-4 bg-gray-50 border border-gray-200">
+                <p class="text-xs text-gray-600 leading-relaxed">
+                    By signing up, you agree to receive email notifications about Jamboree updates.
+                    Your email address will only be used to send you a personal feed link and post notifications.
+                    We will not share your data with third parties. You can unsubscribe at any time by contacting the Jamboree leaders.
+                </p>
+            </div>
+
             <!-- Footer -->
-            <p class="mt-6 text-center text-sm text-gray-500">
+            <p class="mt-4 text-center text-sm text-gray-500">
                 You will receive a personal link to view World Scout Jamboree updates.
+            </p>
+            <p class="mt-2 text-center text-xs text-gray-400">
+                Kindly provided by <a href="https://ckenterprises.co.uk" class="text-brand-500 hover:text-brand-700 transition" target="_blank" rel="noopener">CK Enterprises UK</a>
             </p>
         </div>
     </div>

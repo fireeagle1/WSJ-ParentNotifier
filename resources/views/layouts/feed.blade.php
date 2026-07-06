@@ -7,6 +7,27 @@
 
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Nunito Sans', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#eef8f8', 100: '#d5eeee', 200: '#aedddd', 300: '#7ac5c5',
+                            400: '#4da8a8', 500: '#088486', 600: '#076e70', 700: '#065a5c',
+                            800: '#054849', 900: '#043a3b', 950: '#022526',
+                        },
+                        wsj: {
+                            purple: '#7413dc', orange: '#ff912a', green: '#205b41',
+                            teal: '#088486', navy: '#003982', blue: '#006ddf',
+                            red: '#ed3f23', yellow: '#ffe627',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
