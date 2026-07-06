@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - Expedition Updates Portal</title>
+    <title>Privacy Policy - Jamboree Updates Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
-    <header class="bg-[#7413dc] shadow-sm">
+    <header class="bg-[#7413dc]">
         <div class="max-w-4xl mx-auto px-4 py-5 flex items-center justify-between">
             <a href="{{ route('landing') }}" class="text-xl font-bold text-white">{{ \App\Models\Setting::where('key', 'brand_name')->value('value') ?? 'Scouts' }}</a>
             <a href="{{ route('login') }}" class="text-sm font-medium text-purple-200 hover:text-white transition">
@@ -29,7 +29,7 @@
                     <li><strong>Parent email addresses</strong> — used to send notification emails when new posts are published.</li>
                     <li><strong>Young person's name</strong> — used to identify which Scout the parent is associated with.</li>
                     <li><strong>Leader email addresses and display names</strong> — used for authentication and identifying post authors.</li>
-                    <li><strong>Photos</strong> — uploaded by leaders as part of expedition updates, stored on the server.</li>
+                    <li><strong>Photos</strong> — uploaded by leaders as part of Jamboree updates, stored on the server.</li>
                     <li><strong>Location data</strong> — optional map pin coordinates attached to posts by leaders.</li>
                 </ul>
             </section>
@@ -37,12 +37,12 @@
             <section>
                 <h2 class="text-xl font-semibold text-gray-900 mb-3">How We Use Your Data</h2>
                 <p class="text-gray-700 leading-relaxed">
-                    Your data is used solely for the operation of this expedition updates portal:
+                    Your data is used solely for the operation of this Jamboree updates portal:
                 </p>
                 <ul class="list-disc list-inside text-gray-700 mt-2 space-y-1">
-                    <li>Email addresses are used to send notifications when new expedition updates are posted.</li>
+                    <li>Email addresses are used to send notifications when new Jamboree updates are posted.</li>
                     <li>Access tokens are generated to provide parents with unique, secure links to view the feed.</li>
-                    <li>Photos and location pins are displayed in the feed to keep parents informed of expedition progress.</li>
+                    <li>Photos and location pins are displayed in the feed to keep parents informed of Jamboree progress.</li>
                     <li>Display names are shown alongside posts to identify which leader posted an update.</li>
                 </ul>
             </section>
@@ -60,7 +60,7 @@
                 <h2 class="text-xl font-semibold text-gray-900 mb-3">Data Sharing</h2>
                 <p class="text-gray-700 leading-relaxed">
                     We do not sell, trade, or share your personal data with third parties. Data is only accessible
-                    to expedition leaders (via the dashboard) and parents (via their unique token links).
+                    to Jamboree leaders (via the dashboard) and parents (via their unique token links).
                 </p>
             </section>
 
@@ -68,7 +68,7 @@
                 <h2 class="text-xl font-semibold text-gray-900 mb-3">Data Removal</h2>
                 <p class="text-gray-700 leading-relaxed">
                     Leaders can remove parent records from the system at any time, which revokes access and stops
-                    email notifications. If you would like your data removed, please contact an expedition leader.
+                    email notifications. If you would like your data removed, please contact a Jamboree leader.
                 </p>
             </section>
 
@@ -84,7 +84,7 @@
             <section>
                 <h2 class="text-xl font-semibold text-gray-900 mb-3">Contact</h2>
                 <p class="text-gray-700 leading-relaxed">
-                    For any questions about this privacy policy or your data, please contact an expedition leader
+                    For any questions about this privacy policy or your data, please contact a Jamboree leader
                     directly.
                 </p>
             </section>

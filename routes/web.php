@@ -58,6 +58,7 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     // Leaders management
     Route::get('/leaders', [LeaderController::class, 'index'])->name('leaders.index');
     Route::post('/leaders', [LeaderController::class, 'store'])->name('leaders.store');
+    Route::post('/leaders/{leader}/toggle-visibility', [LeaderController::class, 'toggleVisibility'])->name('leaders.toggle-visibility');
     Route::delete('/leaders/{leader}', [LeaderController::class, 'destroy'])->name('leaders.destroy');
 
     // Home contacts schedule
@@ -70,55 +71,6 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::post('/settings/profile', [LeaderController::class, 'updateProfile'])->name('leaders.update-profile');
     Route::post('/settings/branding', [LeaderController::class, 'updateBranding'])->name('leaders.update-branding');
     Route::delete('/settings/header-image', [LeaderController::class, 'removeHeaderImage'])->name('leaders.remove-header-image');
-});
-
-/*
-|--------------------------------------------------------------------------
-| Temporary Debug Route - REMOVE AFTER USE
-|--------------------------------------------------------------------------
-*/
-Route::get('/debug-mail-config', function () {
-    // Clear OPcache if available
-    $opcacheCleared = function_exists('opcache_reset') ? opcache_reset() : 'opcache not available';
-
-    // Check for any cached config file
-    $cachedConfigPath = base_path('bootstrap/cache/config.php');
-    $cachedConfigExists = file_exists($cachedConfigPath);
-
-    // Delete it if it exists
-    if ($cachedConfigExists) {
-        @unlink($cachedConfigPath);
-    }
-
-    // Also check if there's a cached config in the app instance
-    $app = app();
-
-    // Force reload of env
-    $envPath = base_path('.env');
-    $envContent = file_get_contents($envPath);
-    preg_match('/^MAIL_MAILER=(.*)$/m', $envContent, $matches);
-    $rawMailer = isset($matches[1]) ? trim($matches[1]) : 'NOT FOUND';
-
-    // Check if your hosting runs config:cache in a deploy script
-    // by looking at common deploy files
-    $deployFiles = [];
-    foreach (['.cpanel.yml', 'deploy.php', 'Procfile', '.platform.app.yaml', 'nixpacks.toml', 'render.yaml'] as $f) {
-        if (file_exists(base_path($f))) {
-            $deployFiles[] = $f;
-        }
-    }
-
-    return response()->json([
-        'opcache_cleared' => $opcacheCleared,
-        'cached_config_existed' => $cachedConfigExists,
-        'cached_config_exists_after_delete' => file_exists($cachedConfigPath),
-        'raw_env_mail_mailer' => $rawMailer,
-        'config_mail_default_before_clear' => config('mail.default'),
-        'env_mail_mailer' => env('MAIL_MAILER'),
-        'deploy_files_found' => $deployFiles,
-        'bootstrap_cache_dir_contents' => scandir(base_path('bootstrap/cache')),
-        'app_config_cached' => $app->configurationIsCached(),
-    ]);
 });
 
 require __DIR__.'/auth.php';

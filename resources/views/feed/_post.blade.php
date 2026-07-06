@@ -1,4 +1,4 @@
-<article id="post-{{ $post->id }}" class="bg-white rounded-2xl shadow-sm border {{ $post->is_pinned ? 'border-purple-200 ring-1 ring-purple-100' : 'border-gray-100' }} overflow-hidden">
+<article id="post-{{ $post->id }}" class="bg-white shadow-sm border {{ $post->is_pinned ? 'border-purple-200 ring-1 ring-purple-100' : 'border-gray-100' }} overflow-hidden">
     {{-- Pinned badge --}}
     @if($post->is_pinned)
         <div class="px-4 py-2 bg-purple-50 border-b border-purple-100 flex items-center gap-1.5">
@@ -47,9 +47,9 @@
             @if($post->leader->photo_path)
                 <img src="{{ asset('storage/' . $post->leader->photo_path) }}"
                      alt="{{ $post->leader->display_name }}"
-                     class="w-10 h-10 rounded-full object-cover ring-2 ring-purple-100">
+                     class="w-10 h-10 object-cover ring-2 ring-purple-100">
             @else
-                <div class="w-10 h-10 rounded-full bg-[#7413dc] flex items-center justify-center text-white font-semibold text-sm ring-2 ring-purple-100">
+                <div class="w-10 h-10 bg-[#7413dc] flex items-center justify-center text-white font-semibold text-sm ring-2 ring-purple-100">
                     {{ strtoupper(substr($post->leader->display_name, 0, 1)) }}
                 </div>
             @endif
@@ -64,7 +64,7 @@
 
         <!-- Photos (thumbnails) -->
         @if($post->photos->isNotEmpty())
-            <div class="grid {{ $post->photos->count() === 1 ? 'grid-cols-1' : 'grid-cols-2' }} gap-1.5 mb-4 rounded-xl overflow-hidden">
+            <div class="grid {{ $post->photos->count() === 1 ? 'grid-cols-1' : 'grid-cols-2' }} gap-1.5 mb-4 overflow-hidden">
                 @foreach($post->photos as $photo)
                     <button type="button"
                             class="aspect-square overflow-hidden cursor-pointer hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 {{ $post->photos->count() === 1 ? 'aspect-video' : '' }}"
@@ -80,7 +80,7 @@
 
             {{-- Show small inline map below photos if location exists --}}
             @if($post->latitude && $post->longitude)
-                <div class="rounded-xl overflow-hidden border border-gray-100 mb-4"
+                <div class="overflow-hidden border border-gray-100 mb-4"
                      id="map-post-{{ $post->id }}"
                      style="height: 160px;"
                      data-lat="{{ $post->latitude }}"

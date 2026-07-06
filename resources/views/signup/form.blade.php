@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Sign Up - {{ config('app.name', 'Expedition Updates') }}</title>
+    <title>Sign Up - {{ config('app.name', 'Jamboree Updates') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -14,21 +14,21 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="font-sans antialiased bg-gray-100">
+<body class="font-sans antialiased bg-gray-50">
     <div class="min-h-screen flex flex-col items-center justify-center px-4 py-12">
         <div class="w-full max-w-md">
             <!-- Header -->
             <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-14 h-14 bg-purple-100 rounded-full mb-3">
+                <div class="inline-flex items-center justify-center w-14 h-14 bg-purple-100 mb-3">
                     <svg class="w-7 h-7 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                 </div>
-                <h1 class="text-2xl font-bold text-gray-800">{{ config('app.name', 'Expedition Updates') }}</h1>
+                <h1 class="text-2xl font-bold text-gray-800">{{ config('app.name', 'Jamboree Updates') }}</h1>
                 <p class="mt-2 text-gray-600">Parent Sign-Up</p>
             </div>
 
-            <div class="bg-white shadow-md rounded-lg p-8">
+            <div class="bg-white shadow-sm border border-gray-200 p-8">
                 @if ($closed)
                     <!-- Sign-ups closed message -->
                     <div class="text-center">
@@ -38,19 +38,19 @@
                             </svg>
                         </div>
                         <h2 class="text-xl font-semibold text-gray-700 mb-2">Sign-ups are currently closed</h2>
-                        <p class="text-gray-500">Please contact the expedition leaders if you need access to updates.</p>
+                        <p class="text-gray-500">Please contact the Jamboree leaders if you need access to updates.</p>
                     </div>
                 @else
                     <!-- Success message -->
                     @if (session('success'))
-                        <div class="mb-6 p-4 bg-green-100 border border-green-300 text-green-800 rounded-md">
+                        <div class="mb-6 p-4 bg-green-100 border border-green-300 text-green-800">
                             {{ session('success') }}
                         </div>
                     @endif
 
                     <!-- Validation errors -->
                     @if ($errors->any())
-                        <div class="mb-6 p-4 bg-red-100 border border-red-300 text-red-800 rounded-md">
+                        <div class="mb-6 p-4 bg-red-100 border border-red-300 text-red-800">
                             <ul class="list-disc list-inside text-sm">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
@@ -73,7 +73,7 @@
                                    value="{{ old('young_person_name') }}"
                                    required
                                    maxlength="255"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                   class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                    placeholder="Enter your child's name">
                         </div>
 
@@ -88,13 +88,13 @@
                                    value="{{ old('email') }}"
                                    required
                                    maxlength="255"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                                   class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                                    placeholder="you@example.com">
                         </div>
 
                         <!-- Submit Button -->
                         <button type="submit"
-                                class="w-full px-4 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                class="w-full px-4 py-2 bg-purple-600 text-white font-semibold hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition ease-in-out duration-150">
                             Sign Up for Updates
                         </button>
                     </form>

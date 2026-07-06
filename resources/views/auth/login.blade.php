@@ -12,7 +12,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans text-gray-900 antialiased">
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-50">
         <!-- Purple Brand Header -->
         <div class="w-full bg-[#7413dc] py-6 mb-8">
             <div class="text-center">
@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <div class="w-full sm:max-w-md px-6 py-6 bg-white shadow-md overflow-hidden sm:rounded-lg">
+        <div class="w-full sm:max-w-md px-6 py-6 bg-white shadow-sm overflow-hidden border border-gray-200">
             <!-- Session Status -->
             <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="flex items-center justify-end mt-6">
-                    <button type="submit" class="w-full justify-center inline-flex items-center px-4 py-2 bg-[#7413dc] border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-purple-800 focus:bg-purple-800 active:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-[#7413dc] focus:ring-offset-2 transition ease-in-out duration-150">
+                    <button type="submit" class="w-full justify-center inline-flex items-center px-4 py-2 bg-[#7413dc] border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-purple-800 focus:bg-purple-800 active:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-[#7413dc] focus:ring-offset-2 transition ease-in-out duration-150">
                         {{ __('Log in') }}
                     </button>
                 </div>

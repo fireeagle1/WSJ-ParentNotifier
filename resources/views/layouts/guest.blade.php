@@ -15,22 +15,22 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-purple-50 via-white to-purple-50">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-50">
             <div>
                 <a href="/" class="flex flex-col items-center gap-3">
                     @php $logoPath = \App\Models\Setting::where('key', 'logo_path')->value('value'); @endphp
                     @if($logoPath)
-                        <img src="{{ asset('storage/' . $logoPath) }}" alt="Logo" class="w-20 h-20 object-contain rounded">
+                        <img src="{{ asset('storage/' . $logoPath) }}" alt="Logo" class="w-20 h-20 object-contain">
                     @else
                         <x-application-logo class="w-20 h-20 fill-current text-brand-600" />
                     @endif
-                    <span class="text-lg font-bold text-brand-600">
+                    <span class="text-lg font-bold text-brand-600 text-center max-w-sm">
                         {{ \App\Models\Setting::where('key', 'brand_name')->value('value') ?? 'Scouts' }}
                     </span>
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-lg overflow-hidden sm:rounded-2xl border border-gray-100">
+            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-sm overflow-hidden border border-gray-200">
                 {{ $slot }}
             </div>
         </div>

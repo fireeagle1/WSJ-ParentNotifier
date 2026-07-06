@@ -65,7 +65,9 @@ class FeedController extends Controller
      */
     public function leaders(Request $request, string $token): View
     {
-        $leaders = Leader::orderBy('display_name')->get();
+        $leaders = Leader::where('visible_to_parents', true)
+            ->orderBy('display_name')
+            ->get();
 
         return view('feed.leaders', [
             'leaders' => $leaders,

@@ -6,13 +6,13 @@
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Parent Management</h2>
 
         @if (session('success'))
-            <div class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded-md">
+            <div class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800">
                 {{ session('success') }}
             </div>
         @endif
 
         <!-- Sign-Up Toggle -->
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
+        <div class="bg-white overflow-hidden shadow-sm p-6 mb-6">
             <div class="flex items-center justify-between">
                 <div>
                     <h3 class="text-lg font-medium text-gray-900">Sign-Up Link</h3>
@@ -33,7 +33,7 @@
                 <form method="POST" action="{{ route('parents.toggle-signup') }}">
                     @csrf
                     <button type="submit"
-                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150
+                            class="inline-flex items-center px-4 py-2 border border-transparent font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150
                             {{ $isSignupEnabled
                                 ? 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
                                 : 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500' }}
@@ -45,11 +45,11 @@
         </div>
 
         <!-- Add Parent Form -->
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
+        <div class="bg-white overflow-hidden shadow-sm p-6 mb-6">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Add Parent</h3>
 
             @if ($errors->any())
-                <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded-md">
+                <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800">
                     <ul class="list-disc list-inside text-sm">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -68,7 +68,7 @@
                            value="{{ old('email') }}"
                            required
                            maxlength="255"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                            placeholder="Parent email address">
                 </div>
                 <div class="flex-1">
@@ -79,18 +79,18 @@
                            value="{{ old('young_person_name') }}"
                            required
                            maxlength="255"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                            placeholder="Young person's name">
                 </div>
                 <button type="submit"
-                        class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        class="inline-flex items-center px-4 py-2 bg-brand-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-700 focus:bg-brand-700 active:bg-brand-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition ease-in-out duration-150">
                     Add Parent
                 </button>
             </form>
         </div>
 
         <!-- Parents Table -->
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="bg-white overflow-hidden shadow-sm">
             @if ($parents->isEmpty())
                 <div class="p-6 text-center text-gray-500">
                     No parents registered yet. Add one above or enable the sign-up link.
@@ -131,7 +131,7 @@
                                             <span class="text-gray-400 italic">Revoked</span>
                                         @else
                                             <a href="{{ url('/feed/' . $parent->access_token) }}"
-                                               class="text-indigo-600 hover:text-indigo-800 underline text-xs break-all"
+                                               class="text-brand-600 hover:text-brand-800 underline text-xs break-all"
                                                target="_blank">
                                                 {{ url('/feed/' . $parent->access_token) }}
                                             </a>
@@ -139,11 +139,11 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         @if ($parent->is_revoked)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium bg-red-100 text-red-800">
                                                 Revoked
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800">
                                                 Active
                                             </span>
                                         @endif
@@ -155,7 +155,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                        class="inline-flex items-center px-3 py-1.5 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                                        class="inline-flex items-center px-3 py-1.5 bg-red-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                                     Revoke
                                                 </button>
                                             </form>

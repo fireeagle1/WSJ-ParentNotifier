@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Expedition Updates')</title>
+    <title>@yield('title', 'Jamboree Updates')</title>
 
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -32,7 +32,6 @@
             max-width: 90vw;
             max-height: 90vh;
             object-fit: contain;
-            border-radius: 0.5rem;
         }
         .lightbox-close {
             position: absolute;
@@ -67,7 +66,7 @@
                 <div class="flex items-center gap-3">
                     @php $logoPath = \App\Models\Setting::where('key', 'logo_path')->value('value'); @endphp
                     @if($logoPath)
-                        <img src="{{ asset('storage/' . $logoPath) }}" alt="{{ $brandName }}" class="w-12 h-12 object-contain rounded">
+                        <img src="{{ asset('storage/' . $logoPath) }}" alt="{{ $brandName }}" class="w-12 h-12 object-contain">
                     @else
                         <svg class="w-10 h-10 text-white" viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path d="M32 6c-.8 0-1.5.5-1.8 1.2L28 14l-6 3c-.7.4-1.2 1.1-1.2 1.9 0 .8.5 1.5 1.2 1.9l3.5 2C26.5 26 28 29.5 28 33c0 2 .5 3.8 1.3 5.3.5.9 1.5 1.5 2.7 1.5s2.2-.6 2.7-1.5c.8-1.5 1.3-3.3 1.3-5.3 0-3.5 1.5-7 2.5-10.2l3.5-2c.7-.4 1.2-1.1 1.2-1.9 0-.8-.5-1.5-1.2-1.9l-6-3-2.2-6.8C33.5 6.5 32.8 6 32 6z"/>
@@ -80,7 +79,7 @@
                     @endif
                     <div class="flex flex-col leading-tight">
                         <span class="text-white font-semibold text-lg">{{ $brandName }}</span>
-                        <span class="text-purple-300 text-[11px] font-medium">Expedition Updates</span>
+                        <span class="text-purple-300 text-[11px] font-medium">Jamboree Updates</span>
                     </div>
                 </div>
                 @if(isset($token))

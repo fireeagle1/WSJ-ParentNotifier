@@ -12,14 +12,14 @@
     @else
         <div class="space-y-4">
             @foreach($leaders as $leader)
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+                <div class="bg-white shadow-sm border border-gray-200 p-5">
                     <div class="flex items-start gap-4">
                         @if($leader->photo_path)
                             <img src="{{ asset('storage/' . $leader->photo_path) }}"
                                  alt="{{ $leader->display_name }}"
-                                 class="w-16 h-16 rounded-full object-cover flex-shrink-0 border-2 border-purple-200">
+                                 class="w-16 h-16 object-cover flex-shrink-0 border-2 border-purple-200">
                         @else
-                            <div class="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                            <div class="w-16 h-16 bg-purple-100 flex items-center justify-center flex-shrink-0">
                                 <span class="text-purple-700 font-bold text-xl">{{ substr($leader->display_name, 0, 1) }}</span>
                             </div>
                         @endif

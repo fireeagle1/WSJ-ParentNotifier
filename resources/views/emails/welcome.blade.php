@@ -16,7 +16,7 @@
         <h2 style="color: #1a1a2e; margin-top: 0; margin-bottom: 10px; font-size: 20px;">Welcome!</h2>
 
         <p style="color: #4a4a4a; margin-bottom: 15px;">
-            You've been registered to receive expedition updates for <strong>{{ $parent->young_person_name }}</strong>.
+            You've been registered to receive Jamboree updates for <strong>{{ $parent->young_person_name }}</strong>.
         </p>
 
         <p style="color: #4a4a4a; margin-bottom: 20px;">
@@ -25,7 +25,7 @@
 
         <div style="text-align: center; margin: 30px 0;">
             <a href="{{ $feedUrl }}"
-               style="display: inline-block; background-color: {{ $brandColor }}; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: 600; font-size: 16px;">
+               style="display: inline-block; background-color: {{ $brandColor }}; color: #ffffff; text-decoration: none; padding: 14px 28px; font-weight: 600; font-size: 16px;">
                 View the Feed
             </a>
         </div>
@@ -33,7 +33,7 @@
         <p style="color: #718096; font-size: 13px; margin-top: 25px;">
             Bookmark this link for easy access. Your personal link is:
         </p>
-        <p style="background-color: #f7fafc; padding: 10px 14px; border-radius: 4px; font-size: 12px; word-break: break-all; color: #4a5568; border: 1px solid #e2e8f0;">
+        <p style="background-color: #f7fafc; padding: 10px 14px; font-size: 12px; word-break: break-all; color: #4a5568; border: 1px solid #e2e8f0;">
             {{ $feedUrl }}
         </p>
     </div>

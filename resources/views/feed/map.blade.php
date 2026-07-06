@@ -1,12 +1,12 @@
 @extends('layouts.feed')
 
-@section('title', 'Expedition Map')
+@section('title', 'Jamboree Map')
 
-@section('header', 'Expedition Map')
+@section('header', 'Jamboree Map')
 
 @section('header-actions')
     <a href="/feed/{{ $token }}"
-       class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-green-700 bg-green-50 rounded-md hover:bg-green-100 transition-colors">
+       class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
@@ -27,7 +27,7 @@
             <p class="mt-4 text-gray-500 text-sm">No map pins have been added to posts yet.</p>
         </div>
     @else
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="bg-white shadow-sm border border-gray-200 overflow-hidden">
             <div id="combined-map" style="height: 500px; width: 100%;"></div>
         </div>
 

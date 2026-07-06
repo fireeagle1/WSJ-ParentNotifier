@@ -6,23 +6,23 @@
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Leader Management</h2>
 
         @if (session('success'))
-            <div class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded-md">
+            <div class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800">
                 {{ session('success') }}
             </div>
         @endif
 
         @if (session('error'))
-            <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded-md">
+            <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800">
                 {{ session('error') }}
             </div>
         @endif
 
         <!-- Add Leader Form -->
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 mb-6">
+        <div class="bg-white overflow-hidden shadow-sm p-6 mb-6">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Add Leader</h3>
 
             @if ($errors->any())
-                <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded-md">
+                <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800">
                     <ul class="list-disc list-inside text-sm">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -41,7 +41,7 @@
                            value="{{ old('email') }}"
                            required
                            maxlength="255"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                            placeholder="Email address">
                 </div>
                 <div class="flex-1">
@@ -52,7 +52,7 @@
                            required
                            minlength="8"
                            maxlength="128"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                            placeholder="Password (min 8 characters)">
                 </div>
                 <div class="flex-1">
@@ -63,18 +63,18 @@
                            value="{{ old('display_name') }}"
                            required
                            maxlength="255"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                           class="w-full px-3 py-2 border-2 border-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                            placeholder="Display name">
                 </div>
                 <button type="submit"
-                        class="inline-flex items-center px-4 py-2 bg-brand-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-700 focus:bg-brand-700 active:bg-brand-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                        class="inline-flex items-center px-4 py-2 bg-brand-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-700 focus:bg-brand-700 active:bg-brand-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition ease-in-out duration-150">
                     Add Leader
                 </button>
             </form>
         </div>
 
         <!-- Leaders Table -->
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="bg-white overflow-hidden shadow-sm">
             @if ($leaders->isEmpty())
                 <div class="p-6 text-center text-gray-500">
                     No leaders found.
@@ -85,13 +85,16 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Email
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Display Name
+                                    Role
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Role
+                                    Visible to Parents
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Actions
@@ -100,28 +103,41 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach ($leaders as $leader)
-                                <tr>
+                                <tr class="{{ !$leader->visible_to_parents ? 'bg-gray-50' : '' }}">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{ $leader->email }}
+                                        {{ $leader->display_name }}
                                         @if ($leader->id === auth()->id())
-                                            <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                            <span class="ml-2 inline-flex items-center px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800">
                                                 You
                                             </span>
                                         @endif
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {{ $leader->display_name }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         @if ($leader->is_admin)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 text-xs font-medium bg-purple-100 text-purple-800">
                                                 Admin
                                             </span>
-                                        @else
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                Leader
-                                            </span>
                                         @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $leader->email }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        {{ $leader->role ?? '—' }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        <form method="POST" action="{{ route('leaders.toggle-visibility', $leader) }}">
+                                            @csrf
+                                            <button type="submit"
+                                                    class="inline-flex items-center px-3 py-1.5 border font-semibold text-xs uppercase tracking-widest transition ease-in-out duration-150
+                                                    {{ $leader->visible_to_parents
+                                                        ? 'bg-green-50 border-green-300 text-green-700 hover:bg-green-100'
+                                                        : 'bg-gray-100 border-gray-300 text-gray-500 hover:bg-gray-200' }}">
+                                                @if($leader->visible_to_parents)
+                                                    ✓ Visible
+                                                @else
+                                                    ✗ Hidden
+                                                @endif
+                                            </button>
+                                        </form>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         @if ($leader->id !== auth()->id())
@@ -130,7 +146,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                        class="inline-flex items-center px-3 py-1.5 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                                        class="inline-flex items-center px-3 py-1.5 bg-red-600 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                                     Remove
                                                 </button>
                                             </form>

@@ -72,6 +72,25 @@ class LeaderController extends Controller
     }
 
     /**
+     * Toggle whether a leader is visible to parents on the "Meet the Leaders" page.
+     */
+    public function toggleVisibility(Leader $leader): RedirectResponse
+    {
+        if (!auth()->user()->is_admin) {
+            abort(403);
+        }
+
+        $leader->update([
+            'visible_to_parents' => !$leader->visible_to_parents,
+        ]);
+
+        $status = $leader->visible_to_parents ? 'visible' : 'hidden';
+
+        return redirect()->route('leaders.index')
+            ->with('success', "{$leader->display_name} is now {$status} from parents.");
+    }
+
+    /**
      * Display the settings page.
      */
     public function settings(): View

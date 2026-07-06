@@ -28,6 +28,7 @@ class Leader extends Authenticatable
         'bio',
         'phone',
         'photo_path',
+        'visible_to_parents',
     ];
 
     /**
@@ -48,6 +49,7 @@ class Leader extends Authenticatable
         return [
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'visible_to_parents' => 'boolean',
         ];
     }
 
